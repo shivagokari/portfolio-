@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 
 const navLinks = [
   { href: '#about', label: 'About' },
-  { href: '#experience', label: 'Exp' },
+  { href: '#experience', label: 'Experience' },
   { href: '#skills', label: 'Skills' },
-  { href: '#certifications', label: 'Certificates' },
+  { href: '#certifications', label: 'Certifications' },
   { href: 'https://www.linkedin.com/in/shiva-g-97b251276', label: 'LinkedIn', isExternal: true },
-  { href: '#education', label: 'Edu' },
+  { href: '#education', label: 'Education' },
   { href: '#contact', label: 'Contact' },
 ]
 

@@ -156,7 +156,7 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
               className="hero__glass"
               style={{
                 transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(${isHovered ? 1.04 : 1}, ${isHovered ? 1.04 : 1}, 1)`,
-                transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                transition: isHovered ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                 transformStyle: 'preserve-3d',
               }}
             >
@@ -169,7 +169,7 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
                 className="hero__floating-tag hero__floating-tag--1"
                 style={{
                   transform: `translate3d(${tilt.y * 1.2}px, ${-tilt.x * 1.2}px, 40px)`,
-                  transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                  transition: isHovered ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                 }}
               >
                 <span>AI Ads ✨</span>
@@ -178,7 +178,7 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
                 className="hero__floating-tag hero__floating-tag--2"
                 style={{
                   transform: `translate3d(${-tilt.y * 0.9}px, ${tilt.x * 0.9}px, 60px)`,
-                  transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                  transition: isHovered ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                 }}
               >
                 <span>SEO 📈</span>
@@ -187,7 +187,7 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
                 className="hero__floating-tag hero__floating-tag--3"
                 style={{
                   transform: `translate3d(${tilt.y * 0.6}px, ${-tilt.x * 0.6}px, 30px)`,
-                  transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                  transition: isHovered ? 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                 }}
               >
                 <span>SMM 🚀</span>
