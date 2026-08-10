@@ -63,11 +63,16 @@ export default function Skills() {
                 <span className="skills__category-icon">{cat.icon}</span>
                 <h3>{cat.title}</h3>
               </div>
-              <div className="skills__tags">
+              <ul className="skills__list">
                 {cat.skills.map((skill, j) => (
-                  <span className="skills__tag" key={j}>{skill}</span>
+                  <li className="skills__item" key={j}>
+                    <span className="skills__item-bullet">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    <span className="skills__item-text">{skill}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ))}
         </div>
