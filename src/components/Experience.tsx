@@ -8,26 +8,24 @@ const experiences = [
     period: 'Oct 2025 - Present',
     logo: '/ynm-safety-logo.png',
     highlights: [
-      'Led end-to-end social media management, content planning, and posting across all platforms to drive viral reach and engagement.',
-      'Managed and optimized high-impact Google Ads and Meta Ads campaigns, significantly increasing brand awareness, lead generation, and ROI.',
-      'Designed high-quality marketing creatives, posters, flyers, and edited engaging short-form video reels using Canva, CapCut, and VN Editor.',
-      'Implemented advanced SEO strategies (keyword research, on-page optimization, content scaling) to boost organic traffic and search visibility.',
-      'Leveraged AI tools like ChatGPT and Claude for content creation, SEO optimization, and campaign workflow automation.',
-      'Designed and executed customer-centric WhatsApp marketing campaigns using the Sensy platform to boost customer engagement.'
+      'SEO strategies improving website traffic, keyword rankings, and search visibility',
+      'AI tools integration for content creation, automation, and marketing efficiency',
+      'End-to-end social media management: content planning, posting, and engagement across platforms',
+      'Managed Google Ads & Meta Ads campaigns increasing brand awareness, leads, and ROI'
     ],
   },
   {
     company: 'Bruno Homes',
-    location: 'Hyderabad F/L',
+    location: 'Hyderabad',
     role: 'Digital Marketing Manager',
     period: 'Dec 2024 - Oct 2025',
     logo: '/brunohomes-logo.png',
     highlights: [
-      'Executed Google, Meta, and LinkedIn Ads campaigns to maximize brand visibility and lead generation.',
-      'Enabled local business growth by improving digital visibility (SEO, Google My Business, and IndiaMART product SEO) for top search rankings.',
-      'Deployed ManyChat AI chatbots to automate customer support workflows, reducing manual DM workloads by 60%.',
-      'Integrated AI-powered marketing tools with e-commerce platforms (Amazon, Flipkart, Meesho) for advanced automation.',
-      'Executed direct WhatsApp marketing campaigns using WhatsApp API & Sensy for client engagement.'
+      'Managed Google, Meta, and LinkedIn Ads for brand visibility and lead generation',
+      'Created Instagram posts, reels, and scripts using Canva & AI tools',
+      'Deployed AI chatbots (ManyChat) to automate support, reducing manual DMs by 60%',
+      'Integrated AI with e-commerce platforms (Amazon, Flipkart, Meesho)',
+      'IndiaMART product SEO for top listing rankings'
     ],
   },
   {
@@ -37,10 +35,11 @@ const experiences = [
     period: 'Aug 2023 - Nov 2024',
     logo: '/platinum-logo.png',
     highlights: [
-      'Created, scheduled, and maintained a daily posting content calendar across multiple platforms using Canva and AI tools.',
-      'Managed and optimized Facebook & Instagram ad campaigns for event promotions, community activities, and institutional campaigns.',
-      'Refined marketing strategies using AI insights to analyze audience preferences, competitor trends, and optimal posting times.',
-      'Integrated AI chatbots to automate community management responses, monitoring metrics (engagement, reach, CTR).'
+      'Created and scheduled engaging content using Canva and AI tools for brand consistency',
+      'Managed and optimized Facebook & Instagram Ads for events and programs',
+      'AI-powered insights for optimal posting times, trending topics, and audience preferences',
+      'Integrated AI chatbots for community management and automated responses',
+      'Coordinated influencer collaborations to increase brand exposure'
     ],
   },
 ]
