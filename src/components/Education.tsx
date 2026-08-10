@@ -2,6 +2,13 @@ import { useInView } from '../hooks/useInView'
 
 const education = [
   {
+    degree: 'Masters in Digital Marketing',
+    institution: 'Osmania University, Hyderabad',
+    year: '',
+    logo: '/osmania-logo.png',
+    icon: null,
+  },
+  {
     degree: 'Certified in Digital Marketing',
     institution: 'Tek Academy, Hyderabad',
     year: '',

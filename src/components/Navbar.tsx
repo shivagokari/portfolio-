@@ -6,8 +6,8 @@ const navLinks = [
   { href: '#education', label: 'Education' },
   { href: '#skills', label: 'Skills' },
   { href: '#certifications', label: 'Certifications' },
-  { href: '#portfolio', label: 'Portfolio' },
   { href: '#contact', label: 'Contact' },
+  { href: 'https://www.linkedin.com/in/shiva-g-97b251276', label: 'LinkedIn', isExternal: true },
 ]
 
 export default function Navbar() {
@@ -39,9 +39,13 @@ export default function Navbar() {
           <span />
         </button>
         <ul className={`navbar__links ${mobileOpen ? 'navbar__links--open' : ''}`}>
-          {navLinks.map(({ href, label }) => (
+          {navLinks.map(({ href, label, isExternal }) => (
             <li key={href}>
-              <a href={href} onClick={handleClick}>{label}</a>
+              {isExternal ? (
+                <a href={href} target="_blank" rel="noopener noreferrer" onClick={handleClick}>{label}</a>
+              ) : (
+                <a href={href} onClick={handleClick}>{label}</a>
+              )}
             </li>
           ))}
         </ul>
