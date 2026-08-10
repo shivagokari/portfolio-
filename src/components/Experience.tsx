@@ -53,7 +53,7 @@ export default function Experience() {
         <h2 className="section__title">Experience</h2>
         <div className="experience__timeline">
           {experiences.map((exp, i) => (
-            <div className="experience__item" key={i} style={{ animationDelay: `${i * 0.15}s` }}>
+            <div className="experience__item" key={i} style={{ transitionDelay: isVisible ? `${i * 0.25}s` : '0s' }}>
               <div className="experience__dot" />
               <div className="experience__card">
                 <div className="experience__header">

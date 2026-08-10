@@ -92,22 +92,31 @@ img {
 
 .section__title {
   font-family: var(--font-display);
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-heading);
+  font-size: 2.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-heading) 30%, var(--color-primary) 70%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-align: center;
   margin-bottom: 60px;
   position: relative;
+  letter-spacing: -0.02em;
 }
 
 .section__title::after {
   content: '';
   display: block;
-  width: 60px;
+  width: 48px;
   height: 4px;
   background: var(--color-gradient);
-  border-radius: 2px;
-  margin: 16px auto 0;
+  border-radius: 50px;
+  margin: 14px auto 0;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.section__title:hover::after {
+  width: 84px;
 }
 
 /* Fade-in animation */
