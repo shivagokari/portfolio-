@@ -1675,3 +1675,149 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.75);
   }
 }
+
+/* ============================================
+   DESERT SILHOUETTE ANIMATION
+   ============================================ */
+.desert-anim {
+  position: relative;
+  height: 180px;
+  background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-2));
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+}
+
+.desert-anim__sun {
+  position: absolute;
+  bottom: -40px;
+  left: 15%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(254, 188, 46, 0.25) 0%, rgba(22, 163, 74, 0.05) 70%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Dunes */
+.desert-anim__dunes {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  pointer-events: none;
+}
+
+.desert-anim__dunes-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Birds */
+.desert-anim__birds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.desert-anim__bird-wrapper {
+  position: absolute;
+  left: -100px;
+  width: 40px;
+  height: 30px;
+  color: var(--color-primary);
+  opacity: 0.6;
+  animation: bird-fly linear infinite;
+  will-change: transform, left;
+}
+
+.desert-anim__bird-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.desert-anim__wing-left {
+  transform-origin: 31px 21px;
+  animation: bird-flap-left 0.5s ease-in-out infinite alternate;
+}
+
+.desert-anim__wing-right {
+  transform-origin: 35px 21px;
+  animation: bird-flap-right 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes bird-fly {
+  0% { left: -60px; }
+  100% { left: 100vw; }
+}
+
+@keyframes bird-flap-left {
+  0% { transform: rotate(20deg); }
+  100% { transform: rotate(-35deg); }
+}
+
+@keyframes bird-flap-right {
+  0% { transform: rotate(-20deg); }
+  100% { transform: rotate(35deg); }
+}
+
+/* Camels caravan */
+.desert-anim__caravan {
+  position: absolute;
+  bottom: 12px;
+  right: -200px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  pointer-events: none;
+  animation: caravan-move 28s linear infinite;
+  will-change: transform, right;
+}
+
+.desert-anim__camel-wrapper {
+  width: 50px;
+  height: 40px;
+  color: var(--color-primary-light);
+  opacity: 0.75;
+}
+
+.desert-anim__camel-bobber {
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+  animation: camel-bob 1s ease-in-out infinite alternate;
+}
+
+.desert-anim__camel-svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes caravan-move {
+  0% { right: -150px; }
+  100% { right: 100vw; }
+}
+
+@keyframes camel-bob {
+  0% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-2px) scaleY(0.96) rotate(1deg); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .desert-anim {
+    height: 130px;
+  }
+  .desert-anim__dunes {
+    height: 60px;
+  }
+  .desert-anim__camel-wrapper {
+    width: 38px;
+    height: 30px;
+  }
+}

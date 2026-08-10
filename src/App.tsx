@@ -8,6 +8,7 @@ import Skills from './components/Skills'
 import Certifications from './components/Certifications'
 import Portfolio from './components/Portfolio'
 import Contact from './components/Contact'
+import DesertAnimation from './components/DesertAnimation'
 import './App.css'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
       <Certifications />
       <Portfolio />
       <Contact />
+      <DesertAnimation />
       <footer className="footer">
         <div className="container">
           <p>&copy; {new Date().getFullYear()} Shiva Gokari. All rights reserved.</p>
