@@ -25,6 +25,20 @@ export default function About() {
               help brands build a stronger online presence, boost engagement, and convert audiences
               into loyal customers.
             </p>
+            <div className="about__achievements">
+              <h3 className="about__achievements-title">Key Achievements</h3>
+              <ul className="about__achievements-list">
+                <li>
+                  <strong>Brand Protection:</strong> Protecting the brand from fake and negative reviews to increase online presence.
+                </li>
+                <li>
+                  <strong>Social Media:</strong> Successful regular content posting for daily engagement and reach with viral hashtags.
+                </li>
+                <li>
+                  <strong>SEO &amp; AI Search:</strong> Optimization of website and social media content for easy search using AI tools.
+                </li>
+              </ul>
+            </div>
           </div>
           <div className="about__highlights">
             <div className="about__card">

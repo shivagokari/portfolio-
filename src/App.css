@@ -479,6 +479,43 @@
   line-height: 1.6;
 }
 
+.about__achievements {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(22, 163, 74, 0.04);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.about__achievements-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin-bottom: 12px;
+}
+
+.about__achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about__achievements-list li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 20px;
+}
+
+.about__achievements-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
 /* ============================================
    EXPERIENCE
    ============================================ */
