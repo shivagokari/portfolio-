@@ -84,6 +84,30 @@ function ScrollMouseButton(): ReactElement {
 
 export default function Hero({ scrollY }: HeroProps): ReactElement {
   const statValues = useLoopingCountUp()
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left - rect.width / 2
+    const y = e.clientY - rect.top - rect.height / 2
+    
+    // Smooth 3D tilt calculated relative to card boundaries
+    const tiltX = -(y / (rect.height / 2)) * 14
+    const tiltY = (x / (rect.width / 2)) * 14
+    
+    setTilt({ x: tiltX, y: tiltY })
+  }
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 })
+    setIsHovered(false)
+  }
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
 
   return (
     <section className="hero" id="hero">
@@ -106,7 +130,7 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
               Turning brands into digital powerhouses through SEO, Social Media, and Performance Ads.
             </p>
             <div className="hero__cta">
-              <a href="#portfolio" className="btn btn--primary">View My Work</a>
+              <a href="https://www.linkedin.com/in/shiva-g-97b251276" target="_blank" rel="noopener noreferrer" className="btn btn--primary">View My LinkedIn</a>
               <a href="#contact" className="btn btn--outline">Get In Touch</a>
             </div>
             <div className="hero__stats">
@@ -121,10 +145,52 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
               ))}
             </div>
           </div>
-          <div className="hero__visual">
-            <div className="hero__glass">
-              <div className="hero__avatar">
+          <div 
+            className="hero__visual"
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            style={{ perspective: '1000px' }}
+          >
+            <div 
+              className="hero__glass"
+              style={{
+                transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(${isHovered ? 1.04 : 1}, ${isHovered ? 1.04 : 1}, 1)`,
+                transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              <div className="hero__avatar" style={{ transform: 'translateZ(10px)' }}>
                 <img src="/shiva.jpeg" alt="Shiva Gokari" />
+              </div>
+              
+              {/* 3D Parallax Floating Tags */}
+              <div 
+                className="hero__floating-tag hero__floating-tag--1"
+                style={{
+                  transform: `translate3d(${tilt.y * 1.2}px, ${-tilt.x * 1.2}px, 40px)`,
+                  transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                }}
+              >
+                <span>AI Ads ✨</span>
+              </div>
+              <div 
+                className="hero__floating-tag hero__floating-tag--2"
+                style={{
+                  transform: `translate3d(${-tilt.y * 0.9}px, ${tilt.x * 0.9}px, 60px)`,
+                  transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                }}
+              >
+                <span>SEO 📈</span>
+              </div>
+              <div 
+                className="hero__floating-tag hero__floating-tag--3"
+                style={{
+                  transform: `translate3d(${tilt.y * 0.6}px, ${-tilt.x * 0.6}px, 30px)`,
+                  transition: isHovered ? 'transform 0.05s ease-out' : 'transform 0.5s ease',
+                }}
+              >
+                <span>SMM 🚀</span>
               </div>
             </div>
           </div>
