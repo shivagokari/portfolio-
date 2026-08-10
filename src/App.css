@@ -1790,147 +1790,265 @@
 }
 
 /* ============================================
-   DESERT SILHOUETTE ANIMATION
+   ENTRANCE GATE OVERLAY
    ============================================ */
-.desert-anim {
-  position: relative;
-  height: 180px;
-  background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-2));
-  overflow: hidden;
-  border-top: 1px solid var(--color-border);
-}
-
-.desert-anim__sun {
-  position: absolute;
-  bottom: -40px;
-  left: 15%;
-  width: 120px;
-  height: 120px;
-  background: radial-gradient(circle, rgba(254, 188, 46, 0.25) 0%, rgba(22, 163, 74, 0.05) 70%, transparent 100%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-/* Dunes */
-.desert-anim__dunes {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  pointer-events: none;
-}
-
-.desert-anim__dunes-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* Birds */
-.desert-anim__birds {
-  position: absolute;
+.gate-overlay {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.desert-anim__bird-wrapper {
-  position: absolute;
-  left: -100px;
-  width: 40px;
-  height: 30px;
-  color: var(--color-primary);
-  opacity: 0.6;
-  animation: bird-fly linear infinite;
-  will-change: transform, left;
-}
-
-.desert-anim__bird-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.desert-anim__wing-left {
-  transform-origin: 31px 21px;
-  animation: bird-flap-left 0.5s ease-in-out infinite alternate;
-}
-
-.desert-anim__wing-right {
-  transform-origin: 35px 21px;
-  animation: bird-flap-right 0.5s ease-in-out infinite alternate;
-}
-
-@keyframes bird-fly {
-  0% { left: -60px; }
-  100% { left: 100vw; }
-}
-
-@keyframes bird-flap-left {
-  0% { transform: rotate(20deg); }
-  100% { transform: rotate(-35deg); }
-}
-
-@keyframes bird-flap-right {
-  0% { transform: rotate(-20deg); }
-  100% { transform: rotate(35deg); }
-}
-
-/* Camels caravan */
-.desert-anim__caravan {
-  position: absolute;
-  bottom: 12px;
-  right: -200px;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #0c110c;
+  z-index: 99999;
   display: flex;
-  gap: 8px;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  opacity: 1;
+  visibility: visible;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.gate-overlay--hide {
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  animation: caravan-move 28s linear infinite;
-  will-change: transform, right;
 }
 
-.desert-anim__camel-wrapper {
-  width: 50px;
-  height: 40px;
-  color: var(--color-primary-light);
-  opacity: 0.75;
+.gate-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
 }
 
-.desert-anim__camel-bobber {
-  width: 100%;
-  height: 100%;
+.gate-overlay__title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-white);
+  background: linear-gradient(135deg, var(--color-white) 40%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  animation: fadeInDown 0.8s ease both;
+}
+
+.gate-overlay__subtitle {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: #a0aec0;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.8s ease both 0.15s;
+}
+
+.gate-overlay__switch-box {
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease both 0.3s;
+}
+
+.gate-overlay__hint {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: 0.05em;
+  animation: fadeInUp 0.8s ease both 0.45s;
+}
+
+.gate-overlay__hint-dot {
+  color: #2d3748;
+}
+
+.gate-overlay__hint-active {
+  color: var(--color-primary);
+  text-shadow: 0 0 8px rgba(22, 163, 74, 0.4);
+  transition: color 0.3s ease;
+}
+
+/* ============================================
+   PHYSICAL LEVER SWITCH TOGGLE
+   ============================================ */
+.toggle-container {
+  position: relative;
+  display: inline-block;
+  width: 90px;
+  height: 140px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Base Plate */
+.toggle-base {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 76px;
+  height: 76px;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border: 4px solid #4a5568;
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 24px rgba(0, 0, 0, 0.55),
+    inset 0 2px 4px rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-base-inside {
+  width: 46px;
+  height: 46px;
+  background: #0d1117;
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 4px 10px rgba(0, 0, 0, 0.85),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Lever Arm & Knob Wrapper */
+.toggle-handle-wrapper {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 90px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.toggle-handle {
+  position: absolute;
+  bottom: 26px; /* Pivot center in socket */
+  left: 50%;
+  transform: translateX(-50%) rotate(-28deg);
   transform-origin: bottom center;
-  animation: camel-bob 1s ease-in-out infinite alternate;
+  transition: transform 0.45s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  width: 24px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.desert-anim__camel-svg {
+/* Switch Knob (The Ball) */
+.toggle-handle-knob {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fc8181 0%, #c53030 70%, #9b2c2c 100%);
+  border: 1px solid #742a2a;
+  box-shadow: 
+    0 5px 8px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  z-index: 3;
+  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+/* Switch Metal Bar */
+.toggle-handle-bar-wrapper {
+  width: 8px;
+  height: 52px;
+  background: linear-gradient(to right, #e2e8f0 0%, #718096 45%, #4a5568 100%);
+  border-radius: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
+  margin-top: -3px;
+}
+
+.toggle-handle-bar {
   width: 100%;
   height: 100%;
+  border-radius: inherit;
 }
 
-@keyframes caravan-move {
-  0% { right: -150px; }
-  100% { right: 100vw; }
+/* Interactive States */
+.toggle-input:checked ~ .toggle-handle-wrapper .toggle-handle {
+  transform: translateX(-50%) rotate(28deg);
 }
 
-@keyframes camel-bob {
-  0% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(-2px) scaleY(0.96) rotate(1deg); }
-  100% { transform: translateY(0) scaleY(1); }
+.toggle-input:checked ~ .toggle-handle-wrapper .toggle-handle-knob {
+  background: radial-gradient(circle at 35% 35%, #68d391 0%, #2f855a 70%, #22543d 100%);
+  border-color: #1c4530;
+  box-shadow: 
+    0 5px 12px rgba(72, 187, 120, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
 }
 
-/* Mobile responsive fixes */
-@media (max-width: 768px) {
-  .desert-anim {
-    height: 130px;
-  }
-  .desert-anim__dunes {
-    height: 60px;
-  }
-  .desert-anim__camel-wrapper {
-    width: 38px;
-    height: 30px;
-  }
+/* ============================================
+   THANK YOU OVERLAY
+   ============================================ */
+.thankyou-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: rgba(12, 17, 12, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  padding: 20px;
+}
+
+.thankyou-overlay--show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.thankyou-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+}
+
+.thankyou-overlay__title {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--color-white);
+  background: linear-gradient(135deg, var(--color-white) 30%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  text-shadow: 0 4px 20px rgba(22, 163, 74, 0.15);
+  animation: fadeInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.thankyou-overlay__subtitle {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  color: #a0aec0;
+  animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both 0.15s;
 }
