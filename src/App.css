@@ -917,8 +917,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  overflow: auto;
-  max-height: min(85vh, 960px);
+  overflow: hidden;
 }
 
 .certifications__image {

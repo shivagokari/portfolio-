@@ -131,7 +131,7 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
             </p>
             <div className="hero__cta">
               <a href="https://www.linkedin.com/in/shiva-g-97b251276" target="_blank" rel="noopener noreferrer" className="btn btn--primary">View My LinkedIn</a>
-              <a href="#contact" className="btn btn--outline">Get In Touch</a>
+              <a href="/shiva-gokari-resume.pdf" download="Shiva_Gokari_Resume.pdf" className="btn btn--outline">Download Resume</a>
             </div>
             <div className="hero__stats">
               {STATS_CONFIG.map((stat, i) => (
