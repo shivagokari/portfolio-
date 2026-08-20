@@ -1,8 +1,8 @@
 import { useInView } from '../hooks/useInView'
 
 const websites = [
-  { name: 'Grow With Shiva', url: 'https://growwithshiva.in/', desc: 'Personal digital marketing brand website', logo: '/growwithshiva-logo.png' },
   { name: 'YNM Safety', url: 'https://ynmsafety.com', desc: 'Safety equipment company website', logo: '/ynm-safety-logo.png' },
+  { name: 'Grow With Shiva', url: 'https://growwithshiva.in/', desc: 'Personal digital marketing brand website', logo: '/growwithshiva-logo.png' },
   { name: 'Bruno Homes', url: 'https://brunohomes.in', desc: 'Electric & home appliances brand website', logo: '/brunohomes-logo.png' },
   { name: 'Prismire', url: 'https://www.prismire.com/', desc: 'Overseas consultancy website', logo: '/prismire-logo.png' },
 ]
