@@ -88,6 +88,8 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
   const [isHovered, setIsHovered] = useState(false)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Disable 3D tilt interaction on touch devices to prevent sticky hover effect
+    if (window.matchMedia('(hover: none)').matches) return
     const card = e.currentTarget
     const rect = card.getBoundingClientRect()
     const x = e.clientX - rect.left - rect.width / 2
