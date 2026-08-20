@@ -16,8 +16,12 @@ const linkedinPages = [
 
 const instagramPages = [
   { name: 'Wirally', url: 'https://www.instagram.com/wirally/' },
-  { name: 'Bruno Homes Electric', url: 'https://www.instagram.com/brunohomeselectriccharkhi/' },
+  { name: 'Prismire Pvt Ltd', url: 'https://www.instagram.com/prismirepvtltd/' },
   { name: 'Bruno Homes', url: 'https://www.instagram.com/brunohomes.in/' },
+  { name: 'Inspecon Pvt Ltd', url: 'https://www.instagram.com/inspeconpvtltd/' },
+  { name: 'Snad Developers', url: 'https://www.instagram.com/snaddevelopers/' },
+  { name: 'Chitra Kalakar', url: 'https://www.instagram.com/chitrakalakar14/' },
+  { name: 'Chai Shots', url: 'https://www.instagram.com/chaishotsapp/' },
 ]
 
 export default function Portfolio() {
