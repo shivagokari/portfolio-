@@ -122,6 +122,7 @@ function App() {
         <footer className="footer">
           <div className="container">
             <p>&copy; {new Date().getFullYear()} Shiva Gokari. All rights reserved.</p>
+            <p className="footer__developed" style={{ marginTop: '8px', fontSize: '0.85rem', opacity: 0.8 }}>Self-developed Site by Gokari Shiva</p>
           </div>
         </footer>
       </div>

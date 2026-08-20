@@ -1,4 +1,4 @@
-import { useCallback, useState, type MouseEvent, type ReactElement } from 'react'
+import { useCallback, useEffect, useState, type MouseEvent, type ReactElement } from 'react'
 import { useInView } from '../hooks/useInView'
 
 type Certificate = {
@@ -60,6 +60,13 @@ function CertificationTab({
 export default function Certifications(): ReactElement {
   const { ref, isVisible } = useInView()
   const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % CERTIFICATES.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [activeIndex])
 
   const onTabClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     const raw = e.currentTarget.dataset.index
