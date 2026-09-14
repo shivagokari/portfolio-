@@ -10,10 +10,9 @@ const NAV_LINKS = [
 
 interface NavbarProps {
   activeSection: string
-  onToggleGate?: () => void
 }
 
-export default function Navbar({ activeSection, onToggleGate }: NavbarProps) {
+export default function Navbar({ activeSection }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -66,8 +65,13 @@ export default function Navbar({ activeSection, onToggleGate }: NavbarProps) {
       <nav className={`navbar${isScrolled ? ' is-scrolled' : ''}`} aria-label="Main navigation">
         <div className="navbar__inner">
           {/* Brand */}
-          <a href="#" className="navbar__brand" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
-            Shiva Gokari
+          <a
+            href="#"
+            className="navbar__brand"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+          >
+            <span className="navbar__brand-dot" aria-hidden="true" />
+            <span className="navbar__brand-text">Shiva Gokari</span>
           </a>
 
           {/* Desktop links */}
@@ -88,26 +92,19 @@ export default function Navbar({ activeSection, onToggleGate }: NavbarProps) {
             })}
           </ul>
 
-          {/* Desktop Actions (Toggle Switch + Resume CTA) */}
-          <div className="navbar__actions">
-            {onToggleGate && (
-              <button
-                className="navbar__toggle-btn"
-                onClick={onToggleGate}
-                title="Toggle Entrance Lever Switch"
-                aria-label="Toggle Entrance Lever Switch"
-              >
-                <span className="navbar__toggle-icon">
-                  <span className="navbar__toggle-knob" />
-                </span>
-                <span className="navbar__toggle-text">Toggle</span>
-              </button>
-            )}
-
-            <button className="btn btn--primary navbar__cta" onClick={handleDownload} aria-label="Download Shiva Gokari's resume PDF">
-              Download Resume
-            </button>
-          </div>
+          {/* Desktop CTA */}
+          <button
+            className="btn btn--primary navbar__cta"
+            onClick={handleDownload}
+            aria-label="Download Shiva Gokari's resume PDF"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download Resume
+          </button>
 
           {/* Hamburger */}
           <button
@@ -139,7 +136,10 @@ export default function Navbar({ activeSection, onToggleGate }: NavbarProps) {
         />
         <div className="mobile-menu__drawer" ref={drawerRef}>
           <div className="mobile-menu__header">
-            <span className="mobile-menu__brand">Shiva Gokari</span>
+            <span className="mobile-menu__brand">
+              <span className="navbar__brand-dot" aria-hidden="true" />
+              Shiva Gokari
+            </span>
             <button
               ref={firstFocusRef}
               className="mobile-menu__close"
@@ -165,20 +165,6 @@ export default function Navbar({ activeSection, onToggleGate }: NavbarProps) {
           </nav>
 
           <div className="mobile-menu__footer">
-            {onToggleGate && (
-              <button
-                className="navbar__toggle-btn mobile-menu__toggle-btn"
-                onClick={() => { onToggleGate(); setMenuOpen(false) }}
-                title="Toggle Entrance Lever Switch"
-                style={{ width: '100%', justifyContent: 'center', marginBottom: '0.75rem', padding: '0.65rem 1rem' }}
-              >
-                <span className="navbar__toggle-icon">
-                  <span className="navbar__toggle-knob" />
-                </span>
-                <span className="navbar__toggle-text">Toggle Switch Mode</span>
-              </button>
-            )}
-
             <button className="btn btn--primary" onClick={() => { handleDownload(); setMenuOpen(false) }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />

@@ -21,8 +21,7 @@ export default function ResumeContact() {
         <div className="resume-contact__actions">
           {/* Primary: Download Resume */}
           <button
-            className="btn btn--hero-primary btn--pulse"
-            style={{ fontSize: '1rem', padding: '0.9rem 2rem', borderRadius: '14px' }}
+            className="btn btn--hero-primary btn--pulse contact-btn--main"
             onClick={() => {
               const a = document.createElement('a')
               a.href = '/shiva-gokari-resume.pdf'
@@ -39,9 +38,9 @@ export default function ResumeContact() {
             Download Resume
           </button>
 
-          {/* Email — 3D style */}
+          {/* Email — Classic Luxury Obsidian */}
           <button
-            className="contact-btn contact-btn--email"
+            className="contact-btn"
             onClick={() => window.location.href = 'mailto:gskr070@gmail.com?subject=Digital Marketing Opportunity'}
             id="contact-email"
             aria-label="Email Shiva"
@@ -53,9 +52,9 @@ export default function ResumeContact() {
             Email Me
           </button>
 
-          {/* WhatsApp — 3D style */}
+          {/* WhatsApp — Classic Luxury Obsidian */}
           <button
-            className="contact-btn contact-btn--whatsapp"
+            className="contact-btn"
             onClick={() => window.open('https://wa.me/918142825267?text=Hi%20Shiva%2C%20I%20saw%20your%20portfolio!', '_blank', 'noopener')}
             id="contact-whatsapp"
             aria-label="WhatsApp Shiva"
@@ -66,9 +65,9 @@ export default function ResumeContact() {
             WhatsApp
           </button>
 
-          {/* LinkedIn — 3D style */}
+          {/* LinkedIn — Classic Luxury Obsidian */}
           <button
-            className="contact-btn contact-btn--linkedin"
+            className="contact-btn"
             onClick={() => window.open('https://www.linkedin.com/in/shivagokari/', '_blank', 'noopener')}
             id="contact-linkedin"
             aria-label="LinkedIn profile"

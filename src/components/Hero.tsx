@@ -296,10 +296,10 @@ export default function Hero() {
           onMouseLeave={handleMouseLeave}
         >
           <div className="hero__photo-stage" ref={photoStageRef}>
-            {/* Glowing 3D pedestal & holographic orbital ring */}
+            {/* Glowing 3D pedestal & ambient aura (strictly behind subject) */}
+            <div className="hero__photo-aura" aria-hidden="true" />
             <div className="hero__pedestal-glow" aria-hidden="true" />
             <div className="hero__pedestal-disk" aria-hidden="true" />
-            <div className="hero__photo-orbital" aria-hidden="true" />
 
             {/* Cutout image without background */}
             <div className="hero__photo-wrapper-3d">

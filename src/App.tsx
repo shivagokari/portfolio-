@@ -106,14 +106,6 @@ export default function App() {
     }
   }, [])
 
-  // Allow re-triggering the lever toggle switch anytime from Navbar
-  const handleResetGate = useCallback(() => {
-    setSwitchChecked(false)
-    setGateVisible(true)
-    setThankYouVisible(false)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
-
   return (
     <>
       {/* ─── Mechanical Lever Entrance Gate Overlay ─── */}
@@ -147,7 +139,7 @@ export default function App() {
       </div>
 
       {/* ─── Main Portfolio Content ─── */}
-      <Navbar activeSection={activeSection} onToggleGate={handleResetGate} />
+      <Navbar activeSection={activeSection} />
 
       <main id="main-content">
         <Hero />

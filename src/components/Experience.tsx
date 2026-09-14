@@ -91,18 +91,21 @@ function ExpItem({ exp, delay, isVisible }: ExpItemProps) {
         aria-controls={`exp-body-${exp.company.replace(/\s/g, '-').toLowerCase()}`}
       >
         <div className="exp-item__left">
-          <img
-            src={exp.logo}
-            alt={`${exp.company} logo`}
-            className="exp-item__logo"
-            loading="lazy"
-            width={44}
-            height={44}
-          />
+          <div className="exp-item__logo-box">
+            <img
+              src={exp.logo}
+              alt={`${exp.company} logo`}
+              className="exp-item__logo"
+              loading="lazy"
+              width={40}
+              height={40}
+            />
+          </div>
           <div className="exp-item__info">
             <div className="exp-item__role">{exp.role}</div>
-            <div>
+            <div className="exp-item__company-row">
               <span className="exp-item__company">{exp.company}</span>
+              <span className="exp-item__company-dot" aria-hidden="true">&middot;</span>
               <span className="exp-item__company-meta">{exp.location}</span>
             </div>
           </div>

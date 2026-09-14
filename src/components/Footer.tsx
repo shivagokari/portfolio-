@@ -7,7 +7,7 @@ export default function Footer() {
         <nav className="footer__links" aria-label="Footer links">
           <a href="mailto:gskr070@gmail.com" className="footer__link">Email</a>
           <a href="https://www.linkedin.com/in/shivagokari/" target="_blank" rel="noopener noreferrer" className="footer__link">LinkedIn</a>
-          <a href="https://ynmsafety.com/" target="_blank" rel="noopener noreferrer" className="footer__link">YNM Safety ↗</a>
+          <a href="https://wa.me/918142825267" target="_blank" rel="noopener noreferrer" className="footer__link">WhatsApp</a>
         </nav>
       </div>
     </footer>
