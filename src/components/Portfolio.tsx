@@ -28,7 +28,8 @@ export default function Portfolio() {
   const { ref, isVisible } = useInView()
 
   return (
-    <section className="portfolio section" id="portfolio" ref={ref}>
+    <section className="portfolio section" id="works" ref={ref}>
+      <span id="portfolio" style={{ position: 'absolute', top: '-80px' }} />
       <div className={`container ${isVisible ? 'fade-in' : 'fade-out'}`}>
         <h2 className="section__title">Works</h2>
 
