@@ -80,7 +80,7 @@ function ExpItem({ exp, delay, isVisible }: ExpItemProps) {
 
   return (
     <div
-      className={`exp-item${open ? ' is-open' : ''} fade-in-up fade-delay-${delay}${isVisible ? ' is-visible' : ''}`}
+      className={`exp-item${open ? ' is-open' : ''} fade-up d${delay}${isVisible ? ' is-visible' : ''}`}
       role="article"
     >
       {/* Header / trigger */}
@@ -149,13 +149,13 @@ export default function Experience() {
   return (
     <section className="section" id="experience" aria-labelledby="experience-heading">
       <div className="container">
-        <div className={`fade-in-up${isVisible ? ' is-visible' : ''}`} ref={ref}>
+        <div className={`fade-up${isVisible ? ' is-visible' : ''}`} ref={ref}>
           <span className="section-label">Experience</span>
           <h2 className="section-heading" id="experience-heading">Work Experience</h2>
           <div className="section-divider" aria-hidden="true" />
         </div>
 
-        <div className="experience__timeline">
+        <div className="experience__list">
           {EXPERIENCES.map((exp, i) => (
             <ExpItem
               key={exp.company}

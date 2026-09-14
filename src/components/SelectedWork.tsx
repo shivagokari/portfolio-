@@ -54,7 +54,7 @@ export default function SelectedWork({ onOpenCase }: SelectedWorkProps) {
   return (
     <section className="section section--alt" id="work" aria-labelledby="work-heading">
       <div className="container">
-        <div className={`fade-in-up${isVisible ? ' is-visible' : ''}`} ref={ref}>
+        <div className={`fade-up${isVisible ? ' is-visible' : ''}`} ref={ref}>
           <span className="section-label">Work</span>
           <h2 className="section-heading" id="work-heading">Selected Work</h2>
           <div className="section-divider" aria-hidden="true" />
@@ -64,7 +64,7 @@ export default function SelectedWork({ onOpenCase }: SelectedWorkProps) {
           {PROJECTS.map((project, i) => (
             <li key={project.id}>
               <button
-                className={`work-item fade-in-up fade-delay-${Math.min(i + 1, 4)}${isVisible ? ' is-visible' : ''}`}
+                className={`work-item fade-up d${Math.min(i + 1, 4)}${isVisible ? ' is-visible' : ''}`}
                 onClick={() => onOpenCase(project.id)}
                 aria-label={`View case study: ${project.title}`}
                 id={`work-item-${project.id}`}
