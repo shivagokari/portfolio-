@@ -1,82 +1,168 @@
+import { useState } from 'react'
 import { useInView } from '../hooks/useInView'
 
-const experiences = [
+interface ExperienceItem {
+  company: string
+  location: string
+  role: string
+  period: string
+  logo: string
+  summary: string
+  highlights: string[]
+  tools: string[]
+}
+
+const EXPERIENCES: ExperienceItem[] = [
   {
     company: 'YNM Safety',
     location: 'Hyderabad',
     role: 'Digital Marketing Specialist',
-    period: 'Oct 2025 - Present',
+    period: 'Oct 2025 – Present',
     logo: '/ynm-safety-logo.png',
+    summary: 'Led SEO and performance marketing to improve search visibility and organic growth for a safety equipment brand.',
     highlights: [
-      'SEO strategies improving website traffic, keyword rankings, and search visibility',
-      'AI tools integration for content creation, automation, and marketing efficiency',
-      'End-to-end social media management: content planning, posting, and engagement across platforms',
-      'Managed Google Ads & Meta Ads campaigns increasing brand awareness, leads, and ROI'
+      'Developed and executed SEO strategies improving keyword rankings, website traffic and search visibility',
+      'Managed Google Ads and Meta Ads campaigns to increase brand awareness, qualified leads and ROI',
+      'Integrated AI tools for content creation, automation and marketing efficiency',
+      'Handled end-to-end social media management: planning, content creation, posting and engagement',
     ],
+    tools: ['Google Ads', 'Meta Ads Manager', 'Google Search Console', 'GA4', 'Ahrefs', 'Canva', 'ChatGPT'],
   },
   {
     company: 'Bruno Homes',
     location: 'Hyderabad',
     role: 'Digital Marketing Manager',
-    period: 'Dec 2024 - Oct 2025',
+    period: 'Dec 2024 – Oct 2025',
     logo: '/brunohomes-logo.png',
+    summary: 'Managed full-funnel digital marketing for a real estate and home appliances brand across Google, Meta and LinkedIn.',
     highlights: [
-      'Managed Google, Meta, and LinkedIn Ads for brand visibility and lead generation',
-      'Created Instagram posts, reels, and scripts using Canva & AI tools',
+      'Managed Google, Meta and LinkedIn Ads for brand visibility and lead generation',
+      'Created Instagram posts, reels and scripts using Canva and AI tools',
       'Deployed AI chatbots (ManyChat) to automate support, reducing manual DMs by 60%',
-      'Integrated AI with e-commerce platforms (Amazon, Flipkart, Meesho)',
-      'IndiaMART product SEO for top listing rankings'
+      'Integrated AI workflows with e-commerce platforms: Amazon, Flipkart and Meesho',
+      'Optimised IndiaMART product listings for top search rankings',
     ],
+    tools: ['Google Ads', 'Meta Ads Manager', 'LinkedIn Ads', 'ManyChat', 'Canva', 'Amazon Seller Central', 'IndiaMART'],
   },
   {
     company: 'Platinum Technology',
     location: 'Remote',
     role: 'Social Media Manager',
-    period: 'Aug 2023 - Nov 2024',
+    period: 'Jan 2024 – Dec 2024',
     logo: '/platinum-logo.png',
+    summary: 'Drove brand awareness and community growth for a technology company through strategic social media management.',
     highlights: [
-      'Created and scheduled engaging content using Canva and AI tools for brand consistency',
-      'Managed and optimized Facebook & Instagram Ads for events and programs',
-      'AI-powered insights for optimal posting times, trending topics, and audience preferences',
-      'Integrated AI chatbots for community management and automated responses',
-      'Coordinated influencer collaborations to increase brand exposure'
+      'Planned and executed social media strategy across LinkedIn, Instagram and Twitter',
+      'Grew follower count and engagement metrics through consistent content and community management',
+      'Created data-driven content calendars and monitored performance analytics',
+      'Collaborated with design and tech teams on campaign execution and creative assets',
     ],
+    tools: ['Meta Business Suite', 'LinkedIn Analytics', 'Canva', 'Google Analytics', 'Hootsuite'],
   },
 ]
 
-export default function Experience() {
-  const { ref, isVisible } = useInView()
+function ChevronIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  )
+}
+
+interface ExpItemProps {
+  exp: ExperienceItem
+  delay: number
+  isVisible: boolean
+}
+
+function ExpItem({ exp, delay, isVisible }: ExpItemProps) {
+  const [open, setOpen] = useState(false)
 
   return (
-    <section className="experience section" id="experience" ref={ref}>
-      <div className={`container ${isVisible ? 'fade-in' : 'fade-out'}`}>
-        <h2 className="section__title">Experience</h2>
-        <div className="experience__timeline">
-          {experiences.map((exp, i) => (
-            <div className="experience__item" key={i} style={{ transitionDelay: isVisible ? `${i * 0.25}s` : '0s' }}>
-              <div className="experience__dot" />
-              <div className="experience__card">
-                <div className="experience__header">
-                  <div className="experience__header-left">
-                    {exp.logo && (
-                      <img src={exp.logo} alt={`${exp.company} logo`} className="experience__logo" />
-                    )}
-                    <div>
-                      <h3 className="experience__role">{exp.role}</h3>
-                      <p className="experience__company">
-                        {exp.company} <span className="experience__location">&middot; {exp.location}</span>
-                      </p>
-                    </div>
-                  </div>
-                  <span className="experience__period">{exp.period}</span>
-                </div>
-                <ul className="experience__list">
-                  {exp.highlights.map((h, j) => (
-                    <li key={j}>{h}</li>
-                  ))}
-                </ul>
-              </div>
+    <div
+      className={`exp-item${open ? ' is-open' : ''} fade-in-up fade-delay-${delay}${isVisible ? ' is-visible' : ''}`}
+      role="article"
+    >
+      {/* Header / trigger */}
+      <button
+        className="exp-item__header"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+        aria-controls={`exp-body-${exp.company.replace(/\s/g, '-').toLowerCase()}`}
+      >
+        <div className="exp-item__left">
+          <img
+            src={exp.logo}
+            alt={`${exp.company} logo`}
+            className="exp-item__logo"
+            loading="lazy"
+            width={44}
+            height={44}
+          />
+          <div className="exp-item__info">
+            <div className="exp-item__role">{exp.role}</div>
+            <div>
+              <span className="exp-item__company">{exp.company}</span>
+              <span className="exp-item__company-meta">{exp.location}</span>
             </div>
+          </div>
+        </div>
+        <div className="exp-item__right">
+          <span className="exp-item__period">{exp.period}</span>
+          <span className="exp-item__toggle" aria-hidden="true">
+            <ChevronIcon />
+          </span>
+        </div>
+      </button>
+
+      {/* Expandable body */}
+      <div
+        id={`exp-body-${exp.company.replace(/\s/g, '-').toLowerCase()}`}
+        className="exp-item__body"
+        aria-hidden={!open}
+      >
+        <div className="exp-item__content">
+          <p className="exp-item__summary">{exp.summary}</p>
+
+          <div className="exp-item__section-title">Key Responsibilities</div>
+          <ul className="exp-item__highlights" role="list">
+            {exp.highlights.map((h, i) => (
+              <li key={i} className="exp-item__highlight">{h}</li>
+            ))}
+          </ul>
+
+          <div className="exp-item__section-title">Tools Used</div>
+          <div className="exp-item__tools" role="list">
+            {exp.tools.map(tool => (
+              <span key={tool} className="exp-item__tool" role="listitem">{tool}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Experience() {
+  const { ref, isVisible } = useInView(0.1)
+
+  return (
+    <section className="section" id="experience" aria-labelledby="experience-heading">
+      <div className="container">
+        <div className={`fade-in-up${isVisible ? ' is-visible' : ''}`} ref={ref}>
+          <span className="section-label">Experience</span>
+          <h2 className="section-heading" id="experience-heading">Work Experience</h2>
+          <div className="section-divider" aria-hidden="true" />
+        </div>
+
+        <div className="experience__timeline">
+          {EXPERIENCES.map((exp, i) => (
+            <ExpItem
+              key={exp.company}
+              exp={exp}
+              delay={Math.min(i + 1, 4)}
+              isVisible={isVisible}
+            />
           ))}
         </div>
       </div>
