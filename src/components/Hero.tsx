@@ -4,7 +4,7 @@ import { useInView } from '../hooks/useInView'
 /* Animated counter hook */
 function useCounter(target: number, duration = 1800, start = false) {
   const [val, setVal] = useState(0)
-  const raf = useRef<number>()
+  const raf = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     if (!start) return
@@ -97,6 +97,70 @@ export default function Hero() {
   const years   = useCounter(3,  1500, isVisible)
   const projs   = useCounter(10, 1800, isVisible)
   const saving  = useCounter(60, 2000, isVisible)
+
+  // 3D Scroll Rotation & Mouse Parallax Refs
+  const visualRef = useRef<HTMLDivElement>(null)
+  const photoStageRef = useRef<HTMLDivElement>(null)
+  const targetRotateY = useRef(0)
+  const targetRotateX = useRef(0)
+  const targetTranslateZ = useRef(0)
+  const mouseRotateY = useRef(0)
+  const mouseRotateX = useRef(0)
+  const currRotateY = useRef(0)
+  const currRotateX = useRef(0)
+  const currTranslateZ = useRef(0)
+
+  // Smooth scroll and 3D interpolation
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      // Progress over first 750px of scroll
+      const progress = Math.min(Math.max(scrollY / 750, 0), 1)
+      // Smooth 3D scroll rotation: rotateY -25deg, rotateX 10deg, translateZ 25px
+      targetRotateY.current = progress * -25
+      targetRotateX.current = progress * 9
+      targetTranslateZ.current = progress * 22
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    let animId: number
+    const loop = () => {
+      const targetY = targetRotateY.current + mouseRotateY.current
+      const targetX = targetRotateX.current + mouseRotateX.current
+      const targetZ = targetTranslateZ.current
+
+      // Butter-smooth LERP interpolation (0.08 factor)
+      currRotateY.current += (targetY - currRotateY.current) * 0.08
+      currRotateX.current += (targetX - currRotateX.current) * 0.08
+      currTranslateZ.current += (targetZ - currTranslateZ.current) * 0.08
+
+      if (photoStageRef.current) {
+        photoStageRef.current.style.transform = `perspective(1200px) rotateX(${currRotateX.current.toFixed(2)}deg) rotateY(${currRotateY.current.toFixed(2)}deg) translateZ(${currTranslateZ.current.toFixed(1)}px)`
+      }
+      animId = requestAnimationFrame(loop)
+    }
+    animId = requestAnimationFrame(loop)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(animId)
+    }
+  }, [])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = visualRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    mouseRotateY.current = x * 16
+    mouseRotateX.current = -y * 12
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    mouseRotateY.current = 0
+    mouseRotateX.current = 0
+  }, [])
 
   const scrollToWork = useCallback(() => {
     const el = document.getElementById('work')
@@ -224,20 +288,31 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ─── RIGHT: 3D Photo + Floating Badges ─── */}
-        <div className="hero__visual">
-          <div className="hero__photo-wrap">
-            <div className="hero__photo-glow" aria-hidden="true" />
-            <div className="hero__photo-ring" aria-hidden="true" />
-            <img
-              src="/shiva.jpeg"
-              alt="Shiva Gokari — Digital Marketing Specialist"
-              className="hero__photo"
-              loading="eager"
-              fetchPriority="high"
-            />
+        {/* ─── RIGHT: 3D Photo Cutout + Floating Badges with Scroll & Mouse 3D Rotation ─── */}
+        <div
+          className="hero__visual"
+          ref={visualRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="hero__photo-stage" ref={photoStageRef}>
+            {/* Glowing 3D pedestal & holographic orbital ring */}
+            <div className="hero__pedestal-glow" aria-hidden="true" />
+            <div className="hero__pedestal-disk" aria-hidden="true" />
+            <div className="hero__photo-orbital" aria-hidden="true" />
 
-            {/* Floating 3D badges */}
+            {/* Cutout image without background */}
+            <div className="hero__photo-wrapper-3d">
+              <img
+                src="/shiva.png"
+                alt="Shiva Gokari — Digital Marketing Specialist"
+                className="hero__photo-cutout"
+                loading="eager"
+                fetchPriority="high"
+              />
+            </div>
+
+            {/* Floating 3D badges with stereoscopic Z-depth */}
             <FloatBadge
               className="hero__float-badge--1"
               icon="🎯"

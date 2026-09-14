@@ -10,9 +10,10 @@ const NAV_LINKS = [
 
 interface NavbarProps {
   activeSection: string
+  onToggleGate?: () => void
 }
 
-export default function Navbar({ activeSection }: NavbarProps) {
+export default function Navbar({ activeSection, onToggleGate }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -87,10 +88,26 @@ export default function Navbar({ activeSection }: NavbarProps) {
             })}
           </ul>
 
-          {/* Desktop CTA */}
-          <button className="btn btn--primary navbar__cta" onClick={handleDownload} aria-label="Download Shiva Gokari's resume PDF">
-            Download Resume
-          </button>
+          {/* Desktop Actions (Toggle Switch + Resume CTA) */}
+          <div className="navbar__actions">
+            {onToggleGate && (
+              <button
+                className="navbar__toggle-btn"
+                onClick={onToggleGate}
+                title="Toggle Entrance Lever Switch"
+                aria-label="Toggle Entrance Lever Switch"
+              >
+                <span className="navbar__toggle-icon">
+                  <span className="navbar__toggle-knob" />
+                </span>
+                <span className="navbar__toggle-text">Toggle</span>
+              </button>
+            )}
+
+            <button className="btn btn--primary navbar__cta" onClick={handleDownload} aria-label="Download Shiva Gokari's resume PDF">
+              Download Resume
+            </button>
+          </div>
 
           {/* Hamburger */}
           <button
@@ -148,6 +165,20 @@ export default function Navbar({ activeSection }: NavbarProps) {
           </nav>
 
           <div className="mobile-menu__footer">
+            {onToggleGate && (
+              <button
+                className="navbar__toggle-btn mobile-menu__toggle-btn"
+                onClick={() => { onToggleGate(); setMenuOpen(false) }}
+                title="Toggle Entrance Lever Switch"
+                style={{ width: '100%', justifyContent: 'center', marginBottom: '0.75rem', padding: '0.65rem 1rem' }}
+              >
+                <span className="navbar__toggle-icon">
+                  <span className="navbar__toggle-knob" />
+                </span>
+                <span className="navbar__toggle-text">Toggle Switch Mode</span>
+              </button>
+            )}
+
             <button className="btn btn--primary" onClick={() => { handleDownload(); setMenuOpen(false) }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
