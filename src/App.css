@@ -234,41 +234,41 @@
   will-change: transform;
 }
 
-/* Deep green & black backdrop strictly behind portrait */
+/* Deep green & black backdrop — FIXED behind portrait (does NOT rotate with 3D stage) */
 .hero__photo-backdrop {
-  position: absolute;
-  width: 440px;
-  height: 490px;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%) translateZ(-45px);
-  background: radial-gradient(ellipse at 50% 48%, #082813 0%, #04140a 45%, #020804 70%, transparent 88%);
-  border-radius: 50%;
-  filter: blur(14px);
-  pointer-events: none;
-  z-index: 1;
-  box-shadow: 0 0 70px rgba(22, 196, 94, 0.28);
-}
-
-/* Ambient green aura strictly behind subject (never intersects face) */
-.hero__photo-aura {
   position: absolute;
   width: 380px;
   height: 380px;
-  top: 10%;
+  top: 55%;
   left: 50%;
-  transform: translateX(-50%) translateZ(-35px);
-  background: radial-gradient(circle at center, rgba(22, 196, 94, 0.45) 0%, rgba(16, 120, 50, 0.2) 45%, transparent 72%);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 50% 50%, #0a3d1a 0%, #062e12 25%, #041f0c 45%, #020c04 65%, transparent 85%);
+  border-radius: 50%;
+  filter: blur(18px);
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: 0 0 80px rgba(22, 196, 94, 0.32), 0 0 120px rgba(22, 196, 94, 0.15);
+}
+
+/* Ambient green aura — FIXED behind subject, moon-like glow with faded edges */
+.hero__photo-aura {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%);
+  background: radial-gradient(circle at center, rgba(22, 196, 94, 0.5) 0%, rgba(16, 140, 60, 0.25) 35%, rgba(10, 80, 30, 0.1) 55%, transparent 72%);
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(28px);
+  filter: blur(30px);
   animation: aura-breathe 5s ease-in-out infinite alternate;
-  z-index: 2;
+  z-index: 0;
 }
 
 @keyframes aura-breathe {
-  0%   { opacity: 0.65; transform: translateX(-50%) translateZ(-35px) scale(0.95); }
-  100% { opacity: 1;   transform: translateX(-50%) translateZ(-35px) scale(1.1); }
+  0%   { opacity: 0.6; transform: translate(-50%, -45%) scale(0.96); }
+  100% { opacity: 1;   transform: translate(-50%, -45%) scale(1.08); }
 }
 
 /* 3D pedestal glow & disk beneath cutout */
@@ -1303,6 +1303,33 @@
   font-weight: 500;
   color: var(--color-text-light);
   transition: all 0.3s ease;
+}
+
+.portfolio__tag-name {
+  font-weight: 500;
+}
+
+.portfolio__tag-followers {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 2px;
+}
+
+.portfolio__tag-followers--linkedin {
+  background: rgba(10, 102, 194, 0.1);
+  color: #0a66c2;
+  border: 1px solid rgba(10, 102, 194, 0.2);
+}
+
+.portfolio__tag-followers--instagram {
+  background: rgba(225, 48, 108, 0.1);
+  color: #e1306c;
+  border: 1px solid rgba(225, 48, 108, 0.2);
 }
 
 .portfolio__tag:hover {
@@ -2552,10 +2579,9 @@
 .twitter-card__footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   padding-top: 14px;
-  margin-top: auto;
 }
 
 .twitter-card__metrics {
@@ -2572,25 +2598,60 @@
   color: #718096;
 }
 
+.twitter-card__metric--live {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.twitter-card__metric-value {
+  font-variant-numeric: tabular-nums;
+  min-width: 36px;
+}
+
+.twitter-card__live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  animation: live-pulse 1.5s ease-in-out infinite;
+  margin-left: 2px;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* CTA Row — below metrics */
+.twitter-card__cta-row {
+  padding-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
 .twitter-card__cta-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--color-primary);
-  background: rgba(22, 163, 74, 0.1);
+  background: rgba(22, 163, 74, 0.08);
   border: 1px solid rgba(22, 163, 74, 0.25);
-  padding: 6px 14px;
+  padding: 8px 20px;
   border-radius: 999px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  width: 100%;
+  justify-content: center;
 }
 
 .twitter-card:hover .twitter-card__cta-btn {
   background: var(--color-primary);
   color: #ffffff;
   border-color: var(--color-primary);
-  transform: translateX(2px);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.25);
 }
 
 /* ============================================

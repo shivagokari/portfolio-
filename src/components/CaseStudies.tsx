@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
 
 interface CaseStudyItem {
@@ -15,10 +16,11 @@ interface CaseStudyItem {
   imageAlt: string
   hashtags: string[]
   stats: {
-    replies: string
-    reposts: string
-    likes: string
-    views: string
+    replies: number
+    reposts: number
+    likes: number
+    viewsMin: number
+    viewsMax: number
   }
 }
 
@@ -44,10 +46,11 @@ const CASE_STUDIES: CaseStudyItem[] = [
     imageAlt: 'YNM Safety Google Search Console Rank 1 Proof',
     hashtags: ['#SEO', '#GoogleRankings', '#SearchConsole', '#B2BGrowth'],
     stats: {
-      replies: '38',
-      reposts: '94',
-      likes: '512',
-      views: '28.4K',
+      replies: 38,
+      reposts: 94,
+      likes: 512,
+      viewsMin: 14200,
+      viewsMax: 24800,
     },
   },
   {
@@ -71,10 +74,11 @@ const CASE_STUDIES: CaseStudyItem[] = [
     imageAlt: 'Bruno Homes Meta Ads and Google Ads Performance Dashboard',
     hashtags: ['#MetaAds', '#GoogleAds', '#PerformanceMarketing', '#ManyChat'],
     stats: {
-      replies: '46',
-      reposts: '128',
-      likes: '689',
-      views: '41.2K',
+      replies: 46,
+      reposts: 128,
+      likes: 689,
+      viewsMin: 18500,
+      viewsMax: 25000,
     },
   },
   {
@@ -98,13 +102,98 @@ const CASE_STUDIES: CaseStudyItem[] = [
     imageAlt: 'Platinum Technology Social Media Growth Analytics Dashboard',
     hashtags: ['#SocialMediaManagement', '#CanvaAI', '#ViralReels', '#CommunityGrowth'],
     stats: {
-      replies: '29',
-      reposts: '82',
-      likes: '445',
-      views: '22.6K',
+      replies: 29,
+      reposts: 82,
+      likes: 445,
+      viewsMin: 10400,
+      viewsMax: 22600,
     },
   },
 ]
+
+/** Format number for display: 1000 → 1K, 12500 → 12.5K */
+function formatCount(n: number): string {
+  if (n >= 1000) {
+    const k = n / 1000
+    return k % 1 === 0 ? `${k}K` : `${k.toFixed(1)}K`
+  }
+  return String(n)
+}
+
+/** Hook: rolling live view count that changes within [min, max] range */
+function useRollingViews(min: number, max: number): number {
+  const [count, setCount] = useState(() => min + Math.floor(Math.random() * (max - min)))
+
+  useEffect(() => {
+    const tick = () => {
+      setCount(() => {
+        // Random walk within bounds: ±50-300 each tick
+        const delta = Math.floor(Math.random() * 250) + 50
+        const direction = Math.random() > 0.5 ? 1 : -1
+        let next = min + Math.floor(Math.random() * (max - min))
+        // Smooth: prefer small delta from current, but sometimes jump
+        if (Math.random() > 0.3) {
+          next = min + Math.floor(Math.random() * (max - min))
+        } else {
+          const raw = min + Math.floor(Math.random() * (max - min)) + direction * delta
+          next = Math.max(min, Math.min(max, raw))
+        }
+        return next
+      })
+    }
+
+    // Change every 1.5-3.5s at random intervals
+    let timeoutId: ReturnType<typeof setTimeout>
+    const schedule = () => {
+      const delay = 1500 + Math.random() * 2000
+      timeoutId = setTimeout(() => {
+        tick()
+        schedule()
+      }, delay)
+    }
+    schedule()
+
+    return () => clearTimeout(timeoutId)
+  }, [min, max])
+
+  return count
+}
+
+/** Animated number that smoothly transitions between values */
+function AnimatedNumber({ value, formatter }: { value: number; formatter: (n: number) => string }) {
+  const displayRef = useRef<HTMLSpanElement>(null)
+  const prevValue = useRef(value)
+
+  useEffect(() => {
+    if (!displayRef.current) return
+    const from = prevValue.current
+    const to = value
+    prevValue.current = value
+    if (from === to) return
+
+    let rafId: number
+    const duration = 800
+    const start = performance.now()
+
+    const animate = (now: number) => {
+      const elapsed = now - start
+      const progress = Math.min(1, elapsed / duration)
+      // Ease out quad
+      const eased = 1 - (1 - progress) * (1 - progress)
+      const current = Math.round(from + (to - from) * eased)
+      if (displayRef.current) {
+        displayRef.current.textContent = formatter(current)
+      }
+      if (progress < 1) {
+        rafId = requestAnimationFrame(animate)
+      }
+    }
+    rafId = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(rafId)
+  }, [value, formatter])
+
+  return <span ref={displayRef} className="twitter-card__metric-value">{formatter(value)}</span>
+}
 
 interface CaseStudiesProps {
   onOpenCase: (caseId: string) => void
@@ -112,6 +201,12 @@ interface CaseStudiesProps {
 
 export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
   const { ref, isVisible } = useInView()
+
+  // Rolling view counts for each case study
+  const views0 = useRollingViews(CASE_STUDIES[0].stats.viewsMin, CASE_STUDIES[0].stats.viewsMax)
+  const views1 = useRollingViews(CASE_STUDIES[1].stats.viewsMin, CASE_STUDIES[1].stats.viewsMax)
+  const views2 = useRollingViews(CASE_STUDIES[2].stats.viewsMin, CASE_STUDIES[2].stats.viewsMax)
+  const rollingViews = [views0, views1, views2]
 
   return (
     <section className="case-studies section" id="case-studies" ref={ref}>
@@ -122,7 +217,7 @@ export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
         </p>
 
         <div className="case-studies__grid">
-          {CASE_STUDIES.map((study) => (
+          {CASE_STUDIES.map((study, studyIdx) => (
             <article
               key={study.id}
               className="twitter-card"
@@ -218,7 +313,7 @@ export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
                 </div>
               </div>
 
-              {/* Tweet Actions & CTA Bar */}
+              {/* Tweet Metrics with Live Rolling Counts */}
               <div className="twitter-card__footer">
                 <div className="twitter-card__metrics">
                   <span className="twitter-card__metric" title="Replies">
@@ -242,16 +337,20 @@ export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
                     </svg>
                     {study.stats.likes}
                   </span>
-                  <span className="twitter-card__metric" title="Views">
+                  <span className="twitter-card__metric twitter-card__metric--live" title="Views (Live)">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="18" y1="20" x2="18" y2="10" />
                       <line x1="12" y1="20" x2="12" y2="4" />
                       <line x1="6" y1="20" x2="6" y2="14" />
                     </svg>
-                    {study.stats.views}
+                    <AnimatedNumber value={rollingViews[studyIdx]} formatter={formatCount} />
+                    <span className="twitter-card__live-dot" />
                   </span>
                 </div>
+              </div>
 
+              {/* CTA below metrics */}
+              <div className="twitter-card__cta-row">
                 <div className="twitter-card__cta-btn">
                   <span>Read Case Study</span>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

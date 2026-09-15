@@ -214,10 +214,12 @@ export default function Hero({ scrollY }: HeroProps): ReactElement {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           >
+            {/* FIXED green backdrop & aura — NOT inside photo-stage, so they don't rotate */}
+            <div className="hero__photo-backdrop" aria-hidden="true" />
+            <div className="hero__photo-aura" aria-hidden="true" />
+
+            {/* 3D rotating stage — only this rotates with scroll/mouse */}
             <div className="hero__photo-stage" ref={photoStageRef}>
-              {/* Deep green & black backdrop + ambient aura strictly behind subject (no line on face) */}
-              <div className="hero__photo-backdrop" aria-hidden="true" />
-              <div className="hero__photo-aura" aria-hidden="true" />
               <div className="hero__pedestal-glow" aria-hidden="true" />
               <div className="hero__pedestal-disk" aria-hidden="true" />
 
