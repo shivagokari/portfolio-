@@ -6,7 +6,7 @@ interface HeroProps {
 
 const STATS_CONFIG = [
   { target: 3, suffix: '+' as const, label: 'Years Experience' },
-  { target: 10, suffix: '+' as const, label: 'Brands Managed' },
+  { target: 25, suffix: '+' as const, label: 'Brands Managed' },
   { target: 60, suffix: '%' as const, label: 'DM Reduction via AI' },
 ] as const
 

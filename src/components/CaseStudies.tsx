@@ -120,47 +120,121 @@ function formatCount(n: number): string {
   return String(n)
 }
 
-/** Hook: rolling live view count that changes within [min, max] range */
-function useRollingViews(min: number, max: number): number {
-  const [count, setCount] = useState(() => min + Math.floor(Math.random() * (max - min)))
-
-  useEffect(() => {
-    const tick = () => {
-      setCount(() => {
-        // Random walk within bounds: ±50-300 each tick
-        const delta = Math.floor(Math.random() * 250) + 50
-        const direction = Math.random() > 0.5 ? 1 : -1
-        let next = min + Math.floor(Math.random() * (max - min))
-        // Smooth: prefer small delta from current, but sometimes jump
-        if (Math.random() > 0.3) {
-          next = min + Math.floor(Math.random() * (max - min))
-        } else {
-          const raw = min + Math.floor(Math.random() * (max - min)) + direction * delta
-          next = Math.max(min, Math.min(max, raw))
-        }
-        return next
-      })
-    }
-
-    // Change every 1.5-3.5s at random intervals
-    let timeoutId: ReturnType<typeof setTimeout>
-    const schedule = () => {
-      const delay = 1500 + Math.random() * 2000
-      timeoutId = setTimeout(() => {
-        tick()
-        schedule()
-      }, delay)
-    }
-    schedule()
-
-    return () => clearTimeout(timeoutId)
-  }, [min, max])
-
-  return count
+interface CardMetricsConfig {
+  replies: { min: number; max: number; initial: number }
+  reposts: { min: number; max: number; initial: number }
+  likes: { min: number; max: number; initial: number }
+  views: { min: number; max: number; initial: number }
 }
 
-/** Animated number that smoothly transitions between values */
-function AnimatedNumber({ value, formatter }: { value: number; formatter: (n: number) => string }) {
+const CARDS_METRICS_CONFIG: CardMetricsConfig[] = [
+  {
+    // YNM Safety
+    replies: { min: 35, max: 48, initial: 38 },
+    reposts: { min: 88, max: 112, initial: 94 },
+    likes: { min: 485, max: 550, initial: 512 },
+    views: { min: 13500, max: 23500, initial: 14800 },
+  },
+  {
+    // Bruno Homes
+    replies: { min: 42, max: 56, initial: 46 },
+    reposts: { min: 118, max: 148, initial: 128 },
+    likes: { min: 650, max: 740, initial: 689 },
+    views: { min: 18500, max: 24800, initial: 21200 },
+  },
+  {
+    // Platinum Technology
+    replies: { min: 26, max: 38, initial: 29 },
+    reposts: { min: 76, max: 96, initial: 82 },
+    likes: { min: 420, max: 485, initial: 445 },
+    views: { min: 11500, max: 22000, initial: 18100 },
+  },
+]
+
+interface MetricValues {
+  replies: number
+  reposts: number
+  likes: number
+  views: number
+}
+
+/** Hook: very slow, gentle rolling stats across all 4 metrics */
+function useSlowRollingCardMetrics(cfg: CardMetricsConfig): MetricValues {
+  const [metrics, setMetrics] = useState<MetricValues>(() => ({
+    replies: cfg.replies.initial,
+    reposts: cfg.reposts.initial,
+    likes: cfg.likes.initial,
+    views: cfg.views.initial,
+  }))
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>
+    let isCancelled = false
+
+    const tick = () => {
+      if (isCancelled) return
+
+      setMetrics((prev) => {
+        // Pick one or two metrics at random to gently adjust
+        const allKeys: (keyof MetricValues)[] = ['replies', 'reposts', 'likes', 'views']
+        const count = Math.random() > 0.7 ? 2 : 1
+        const chosen = [...allKeys].sort(() => Math.random() - 0.5).slice(0, count)
+
+        const next = { ...prev }
+
+        chosen.forEach((key) => {
+          const config = cfg[key]
+          // Organic drift: slight bias toward upward growth (60% up, 40% down)
+          const dir = Math.random() > 0.4 ? 1 : -1
+
+          if (key === 'replies') {
+            const delta = 1
+            const val = prev.replies + dir * delta
+            next.replies = Math.max(config.min, Math.min(config.max, val))
+          } else if (key === 'reposts') {
+            const delta = Math.random() > 0.6 ? 2 : 1
+            const val = prev.reposts + dir * delta
+            next.reposts = Math.max(config.min, Math.min(config.max, val))
+          } else if (key === 'likes') {
+            const delta = Math.floor(Math.random() * 3) + 1 // 1 to 3
+            const val = prev.likes + dir * delta
+            next.likes = Math.max(config.min, Math.min(config.max, val))
+          } else if (key === 'views') {
+            const delta = Math.floor(Math.random() * 80) + 30 // 30 to 110
+            const val = prev.views + dir * delta
+            next.views = Math.max(config.min, Math.min(config.max, val))
+          }
+        })
+
+        return next
+      })
+
+      // Very slow effect: next change occurs gently every 5.0s to 8.5s
+      const delay = 5000 + Math.random() * 3500
+      timeoutId = setTimeout(tick, delay)
+    }
+
+    // Gentle initial delay
+    const initialDelay = 3000 + Math.random() * 2500
+    timeoutId = setTimeout(tick, initialDelay)
+
+    return () => {
+      isCancelled = true
+      clearTimeout(timeoutId)
+    }
+  }, [cfg])
+
+  return metrics
+}
+
+/** Animated number that smoothly transitions between values with a very slow ease */
+function AnimatedNumber({
+  value,
+  formatter,
+}: {
+  value: number
+  formatter?: (n: number) => string
+}) {
   const displayRef = useRef<HTMLSpanElement>(null)
   const prevValue = useRef(value)
 
@@ -172,17 +246,18 @@ function AnimatedNumber({ value, formatter }: { value: number; formatter: (n: nu
     if (from === to) return
 
     let rafId: number
-    const duration = 800
+    // Very slow, smooth transition over 1800ms
+    const duration = 1800
     const start = performance.now()
 
     const animate = (now: number) => {
       const elapsed = now - start
       const progress = Math.min(1, elapsed / duration)
-      // Ease out quad
-      const eased = 1 - (1 - progress) * (1 - progress)
+      // Smooth ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
       const current = Math.round(from + (to - from) * eased)
       if (displayRef.current) {
-        displayRef.current.textContent = formatter(current)
+        displayRef.current.textContent = formatter ? formatter(current) : String(current)
       }
       if (progress < 1) {
         rafId = requestAnimationFrame(animate)
@@ -192,7 +267,11 @@ function AnimatedNumber({ value, formatter }: { value: number; formatter: (n: nu
     return () => cancelAnimationFrame(rafId)
   }, [value, formatter])
 
-  return <span ref={displayRef} className="twitter-card__metric-value">{formatter(value)}</span>
+  return (
+    <span ref={displayRef} className="twitter-card__metric-value">
+      {formatter ? formatter(value) : String(value)}
+    </span>
+  )
 }
 
 interface CaseStudiesProps {
@@ -202,11 +281,11 @@ interface CaseStudiesProps {
 export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
   const { ref, isVisible } = useInView()
 
-  // Rolling view counts for each case study
-  const views0 = useRollingViews(CASE_STUDIES[0].stats.viewsMin, CASE_STUDIES[0].stats.viewsMax)
-  const views1 = useRollingViews(CASE_STUDIES[1].stats.viewsMin, CASE_STUDIES[1].stats.viewsMax)
-  const views2 = useRollingViews(CASE_STUDIES[2].stats.viewsMin, CASE_STUDIES[2].stats.viewsMax)
-  const rollingViews = [views0, views1, views2]
+  // Slow rolling stats across all 4 metrics for each case study
+  const stats0 = useSlowRollingCardMetrics(CARDS_METRICS_CONFIG[0])
+  const stats1 = useSlowRollingCardMetrics(CARDS_METRICS_CONFIG[1])
+  const stats2 = useSlowRollingCardMetrics(CARDS_METRICS_CONFIG[2])
+  const rollingStats = [stats0, stats1, stats2]
 
   return (
     <section className="case-studies section" id="case-studies" ref={ref}>
@@ -313,14 +392,14 @@ export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
                 </div>
               </div>
 
-              {/* Tweet Metrics with Live Rolling Counts */}
+              {/* Tweet Metrics with Live Slow Rolling Counts across ALL metrics */}
               <div className="twitter-card__footer">
                 <div className="twitter-card__metrics">
                   <span className="twitter-card__metric" title="Replies">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                     </svg>
-                    {study.stats.replies}
+                    <AnimatedNumber value={rollingStats[studyIdx].replies} />
                   </span>
                   <span className="twitter-card__metric" title="Reposts">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -329,13 +408,13 @@ export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
                       <polyline points="7 23 3 19 7 15" />
                       <path d="M21 13v2a4 4 0 0 1-4 4H3" />
                     </svg>
-                    {study.stats.reposts}
+                    <AnimatedNumber value={rollingStats[studyIdx].reposts} />
                   </span>
                   <span className="twitter-card__metric" title="Likes">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
-                    {study.stats.likes}
+                    <AnimatedNumber value={rollingStats[studyIdx].likes} />
                   </span>
                   <span className="twitter-card__metric twitter-card__metric--live" title="Views (Live)">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -343,7 +422,7 @@ export default function CaseStudies({ onOpenCase }: CaseStudiesProps) {
                       <line x1="12" y1="20" x2="12" y2="4" />
                       <line x1="6" y1="20" x2="6" y2="14" />
                     </svg>
-                    <AnimatedNumber value={rollingViews[studyIdx]} formatter={formatCount} />
+                    <AnimatedNumber value={rollingStats[studyIdx].views} formatter={formatCount} />
                     <span className="twitter-card__live-dot" />
                   </span>
                 </div>

@@ -1309,29 +1309,6 @@
   font-weight: 500;
 }
 
-.portfolio__tag-followers {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-left: 2px;
-}
-
-.portfolio__tag-followers--linkedin {
-  background: rgba(10, 102, 194, 0.1);
-  color: #0a66c2;
-  border: 1px solid rgba(10, 102, 194, 0.2);
-}
-
-.portfolio__tag-followers--instagram {
-  background: rgba(225, 48, 108, 0.1);
-  color: #e1306c;
-  border: 1px solid rgba(225, 48, 108, 0.2);
-}
-
 .portfolio__tag:hover {
   transform: translateY(-3px);
 }
@@ -2605,7 +2582,7 @@
 
 .twitter-card__metric-value {
   font-variant-numeric: tabular-nums;
-  min-width: 36px;
+  display: inline-block;
 }
 
 .twitter-card__live-dot {
